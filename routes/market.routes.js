@@ -1,5 +1,6 @@
 const express = require("express")
 const isAuthenticated = require("../middleware/isAuthenticated")
+const isAuthor = require("../middleware/isAuthor")
 const router = express.Router()
 const Market = require("../models/Market.model")
 
@@ -31,7 +32,7 @@ router.post("/", isAuthenticated, async (req, res, next) => {
 		}
 		const market = await Market.create({ 
             name,
-            author: req.payload, //?
+            author: req.payload, 
             type,
             imageUrl, 
             description, 
@@ -58,7 +59,7 @@ router.put("/:marketId", async (req, res, next) => {
 });
 
 router.delete("/:marketId", async (req, res, next) => {
-	try {
+	try { //!same here
 		const { marketId } = req.params
 		await Market.findByIdAndDelete(marketId)
 		return res.status(200).json({ message: `Market ${marketId} deleted` })
@@ -67,7 +68,7 @@ router.delete("/:marketId", async (req, res, next) => {
 	}
 });
 
-router.get("/search", async (req, res) => {
+/*router.get("/search", async (req, res, next) => {
 	const { q } = req.query;
     console.log(req.query);
 	try {
@@ -77,6 +78,6 @@ router.get("/search", async (req, res) => {
 	} catch (error) {
 		next(error);
 	}
-});
+});*/
 
 module.exports = router
