@@ -5,7 +5,7 @@ const marketSchema = new Schema(
         name: { type: String, required: true },
         imageUrl: String,
         address: {
-            coordinates:[Number]
+            coordinates: [Number]
         },
         type: {
             type: String,
@@ -29,10 +29,10 @@ const marketSchema = new Schema(
                 type: Number,
                 max: 23
             },
-            website: String,
-            stars: [{ type: Schema.Types.ObjectId, ref: "User" }],
-            author: { type: Schema.Types.ObjectId, ref: "User" },
-        }
+        },
+        website: String,
+        stars: [{ type: Schema.Types.ObjectId, ref: "User" }],
+        author: { type: Schema.Types.ObjectId, ref: "User" }
     }
 )
 
