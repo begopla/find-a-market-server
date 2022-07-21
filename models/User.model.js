@@ -6,22 +6,26 @@ const userSchema = new Schema(
 		name: {
 			type: String,
 			required:true,
-			unique: true //-> Ideally, should be unique, but its up to you
+			unique: true,
 		},
 		email: String,
 		password: String,
-		profilePicture: String,
+		profilePicture: {
+			type: String,
+			default: '../assets/userLogo.png'
+		},
+		
 		location: String,
 		bookmarkList:[
 			{
 				type: Schema.Types.ObjectId,
-				ref: "Market"
+				ref: "Market",
 			},
 		],
 		usersFollowed: [
 			{
 				type: Schema.Types.ObjectId,
-				ref:'User'
+				ref:'User',
 
 			},
 		],
