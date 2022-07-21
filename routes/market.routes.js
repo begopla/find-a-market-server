@@ -1,5 +1,5 @@
 const express = require("express")
-const isAuthenticated = require("../middlewares/isAuthenticated")
+const isAuthenticated = require("../middleware/isAuthenticated")
 const router = express.Router()
 const Market = require("../models/Market.model")
 
@@ -48,7 +48,7 @@ router.post("/", isAuthenticated, async (req, res, next) => {
 });
 
 router.put("/:marketId", async (req, res, next) => {
-    try {
+    try { //!needs middleware to check if author 
         const { marketId } = req.params
         const market = await Market.findByIdAndUpdate(marketId, req.body, { new: true})
         return res.status(200).json(market)
@@ -60,16 +60,16 @@ router.put("/:marketId", async (req, res, next) => {
 router.delete("/:marketId", async (req, res, next) => {
 	try {
 		const { marketId } = req.params
-		await Market.findByIdAndDelete(id)
+		await Market.findByIdAndDelete(marketId)
 		return res.status(200).json({ message: `Market ${marketId} deleted` })
 	} catch (error) {
 		next(error)
 	}
 });
 
-/*router.get("/search", async (req, res) => {
+router.get("/search", async (req, res) => {
 	const { q } = req.query;
-    
+    console.log(req.query);
 	try {
 		const searchResults = await Market.find({name:{$regex: q, $options: 'i'}});
 		
@@ -77,6 +77,6 @@ router.delete("/:marketId", async (req, res, next) => {
 	} catch (error) {
 		next(error);
 	}
-});*/
+});
 
 module.exports = router
