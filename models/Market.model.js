@@ -31,7 +31,7 @@ const marketSchema = new Schema(
             },
         },
         website: String,
-        stars: [{ type: Schema.Types.ObjectId, ref: "User" }],
+        stars: [{ type: Schema.Types.ObjectId, ref: "User" }], //!Stars es el numero de users que han marcado la actividad como favorita?
         author: { type: Schema.Types.ObjectId, ref: "User" }
     }
 )
