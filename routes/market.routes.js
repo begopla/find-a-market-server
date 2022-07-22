@@ -5,12 +5,12 @@ const router = express.Router()
 const Market = require("../models/Market.model")
 
 router.get("/search", async (req, res, next) => {
-	const q = req.query;
-    console.log("req.query: ", req.query);
+	const q = req.query.name;
+    console.log("req.query: ", req.query)
 	console.log("q: ", q)
 	try {
-		const searchResults = await Market.find(q);
-		//const searchResults = await Market.find({name:{$regex: {q}, $options: 'i'}});
+		//const searchResults = await Market.find(q);
+		const searchResults = await Market.find({name:{$regex: `${q}`, $options: 'i'}});
 		console.log(searchResults.length, " search results")
 		return res.status(200).json(searchResults);
 	} catch (error) {
