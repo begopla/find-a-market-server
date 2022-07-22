@@ -6,7 +6,7 @@ const userSchema = new Schema(
 		name: {
 			type: String,
 			required:true,
-			unique: true,
+			unique: true 
 		},
 		email: String,
 		password: String,
@@ -19,13 +19,13 @@ const userSchema = new Schema(
 		bookmarkList:[
 			{
 				type: Schema.Types.ObjectId,
-				ref: "Market",
+				ref: "Market"
 			},
 		],
 		usersFollowed: [
 			{
 				type: Schema.Types.ObjectId,
-				ref:'User',
+				ref:'User'
 
 			},
 		],
