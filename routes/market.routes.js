@@ -4,13 +4,34 @@ const isAuthor = require("../middleware/isAuthor")
 const router = express.Router()
 const Market = require("../models/Market.model")
 
-router.get("/", async (req, res, next) => {
+router.get("/search", async (req, res, next) => {
+	const q = req.query;
+    console.log("req.query: ", req.query);
+	console.log("q: ", q)
 	try {
+		const searchResults = await Market.find(q);
+		//const searchResults = await Market.find({name:{$regex: {q}, $options: 'i'}});
+		console.log(searchResults.length, " search results")
+		return res.status(200).json(searchResults);
+	} catch (error) {
+		next(error);
+	}
+});
+
+router.get("/discover", async (req, res, next) => {
+	console.log("something")
+	 try {
 		const markets = await Market.find()
-		return res.status(200).json(markets)
+
+		const randomId = markets[Math.floor(Math.random() * markets.length)]._id.valueOf();
+		console.log(randomId)
+
+		const market = await Market.findById(randomId)
+		return res.status(200).json(market)
+		
 	} catch (error) {
 		next(error)
-	}
+	} 
 });
 
 router.get("/:marketId", async (req, res, next) => {
@@ -22,6 +43,35 @@ router.get("/:marketId", async (req, res, next) => {
 		next(error)
 	}
 })
+
+router.put("/:marketId", async (req, res, next) => {
+    try { //!needs middleware to check if author 
+        const { marketId } = req.params
+        const market = await Market.findByIdAndUpdate(marketId, req.body, { new: true})
+        return res.status(200).json(market)
+    } catch (error) {
+        next(error)
+    }
+});
+
+router.delete("/:marketId", async (req, res, next) => {
+	try { //!same here
+		const { marketId } = req.params
+		await Market.findByIdAndDelete(marketId)
+		return res.status(200).json({ message: `Market ${marketId} deleted` })
+	} catch (error) {
+		next(error)
+	}
+});
+
+router.get("/", async (req, res, next) => {
+	try {
+		const markets = await Market.find()
+		return res.status(200).json(markets)
+	} catch (error) {
+		next(error)
+	}
+});
 
 router.post("/", isAuthenticated, async (req, res, next) => {
 	console.log(req.payload)
@@ -48,36 +98,5 @@ router.post("/", isAuthenticated, async (req, res, next) => {
 	}
 });
 
-router.put("/:marketId", async (req, res, next) => {
-    try { //!needs middleware to check if author 
-        const { marketId } = req.params
-        const market = await Market.findByIdAndUpdate(marketId, req.body, { new: true})
-        return res.status(200).json(market)
-    } catch (error) {
-        next(error)
-    }
-});
-
-router.delete("/:marketId", async (req, res, next) => {
-	try { //!same here
-		const { marketId } = req.params
-		await Market.findByIdAndDelete(marketId)
-		return res.status(200).json({ message: `Market ${marketId} deleted` })
-	} catch (error) {
-		next(error)
-	}
-});
-
-/*router.get("/search", async (req, res, next) => {
-	const { q } = req.query;
-    console.log(req.query);
-	try {
-		const searchResults = await Market.find({name:{$regex: q, $options: 'i'}});
-		
-		return res.status(200).json(searchResults);
-	} catch (error) {
-		next(error);
-	}
-});*/
-
 module.exports = router
+

@@ -28,7 +28,7 @@ const marketSchema = new Schema(
             to: {
                 type: Number,
                 max: 23
-            },
+            }
         },
         website: String,
         stars: [{ type: Schema.Types.ObjectId, ref: "User" }],

@@ -26,14 +26,6 @@ router.get("/favourites",isAuthenticated, async (req, res, next) =>{
     }
 })
 
-
-router.get("")
-
-router.get("/", isAuthenticated, (req, res, next)=>{
-    res.status(200).json(req.payload);
-    
-});
-
 // C(R)UD -- Read and return followed users
 
 router.get("/followed",isAuthenticated, async (req, res, next) =>{
@@ -51,8 +43,6 @@ router.get("/followed",isAuthenticated, async (req, res, next) =>{
 })
 
 
-router.get("")
-
 router.get("/", isAuthenticated, (req, res, next)=>{
     res.status(200).json(req.payload);
     
@@ -61,11 +51,11 @@ router.get("/", isAuthenticated, (req, res, next)=>{
 // CR(U)D -- Update user object adding image string
 router.put('/',isAuthenticated, async(req, res, next) =>{
     try {
-       const {image} =req.body;
+       const {profilePicture} =req.body;
        const user = await User.findByIdAndUpdate(
         req.payload._id,
         {
-            image,
+            profilePicture,
         },
         { new: true}
        );
@@ -73,11 +63,11 @@ router.put('/',isAuthenticated, async(req, res, next) =>{
         algorithm: "HS256",
         expiresIn: "2d",
        });
-       console.log(image)
+       console.log(profilePicture)
        res.status(200).json({
           
         message: 'File successfully uploaded',
-        image: image,
+        image: profilePicture,
         user: req.payload,
         token: authToken
 
