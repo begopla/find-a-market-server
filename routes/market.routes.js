@@ -109,7 +109,7 @@ router.post("/", isAuthenticated, async (req, res, next) => {
 
 //Create a new review
 
-router.post("/:marketId/review", isAuthenticated, isReviewCreator, async(req, res, next) =>{
+router.post("/:marketId/review", isAuthenticated, async(req, res, next) =>{
 
 	try {
 		const { marketId } = req.params;
