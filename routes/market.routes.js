@@ -6,6 +6,57 @@ const Market = require("../models/Market.model")
 const Review = require("../models/Review.model")
 const User = require("../models/User.model")
 
+router.get("/search", async (req, res, next) => {
+	const q = req.query.name;
+    console.log("req.query: ", req.query)
+	console.log("q: ", q)
+	try {
+		//const searchResults = await Market.find(q);
+		const searchResults = await Market.find({name:{$regex: `${q}`, $options: 'i'}});
+		console.log(searchResults.length, " search results")
+		return res.status(200).json(searchResults);
+	} catch (error) {
+		next(error);
+	}
+});
+
+router.get("/discover", async (req, res, next) => {
+	console.log("something")
+	 try {
+		const markets = await Market.find()
+
+		const randomId = markets[Math.floor(Math.random() * markets.length)]._id.valueOf();
+		console.log(randomId)
+
+		const market = await Market.findById(randomId)
+		return res.status(200).json(market)
+		
+	} catch (error) {
+		next(error)
+	} 
+});
+
+
+router.put("/:marketId", async (req, res, next) => {
+    try { //!needs middleware to check if author 
+        const { marketId } = req.params
+        const market = await Market.findByIdAndUpdate(marketId, req.body, { new: true})
+        return res.status(200).json(market)
+    } catch (error) {
+        next(error)
+    }
+});
+
+router.delete("/:marketId", async (req, res, next) => {
+	try { //!same here
+		const { marketId } = req.params
+		await Market.findByIdAndDelete(marketId)
+		return res.status(200).json({ message: `Market ${marketId} deleted` })
+	} catch (error) {
+		next(error)
+	}
+});
+
 router.get("/", async (req, res, next) => {
 	try {
 		const markets = await Market.find()
@@ -14,7 +65,6 @@ router.get("/", async (req, res, next) => {
 		next(error)
 	}
 });
-
 
 router.post("/", isAuthenticated, async (req, res, next) => {
 	console.log(req.payload)
@@ -40,6 +90,7 @@ router.post("/", isAuthenticated, async (req, res, next) => {
 		next(error)
 	}
 });
+
 
 router.get("/:marketId", async (req, res, next) => {
 	try {
@@ -193,3 +244,4 @@ router.delete("/:marketId/:reviewId", async (req, res, next) => {
 
 
 module.exports = router
+

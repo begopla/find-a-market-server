@@ -11,7 +11,6 @@ const jwt = require("jsonwebtoken")
  */
 
 // C(R)UD -- Read and return current user favourite markets
-
 router.get("/favourites",isAuthenticated, async (req, res, next) =>{
 
     try {
@@ -26,12 +25,7 @@ router.get("/favourites",isAuthenticated, async (req, res, next) =>{
     }
 })
 
-
-
-
-
 // C(R)UD -- Read and return followed users
-
 router.get("/followed",isAuthenticated, async (req, res, next) =>{
 
     try {
@@ -46,12 +40,8 @@ router.get("/followed",isAuthenticated, async (req, res, next) =>{
     }
 })
 
-
-
-
 router.get("/", isAuthenticated, (req, res, next)=>{
     res.status(200).json(req.payload);
-    
 });
 
 // CR(U)D -- Update user object adding image string
@@ -84,9 +74,7 @@ router.put('/',isAuthenticated, async(req, res, next) =>{
     }
 })
 
-
 //CR(U)D -- return ImageURL
-
 router.post('/upload', isAuthenticated, async (req,res,next) =>{
     try {   
         userObjectImage = req.payload.profilePicture
@@ -101,7 +89,6 @@ router.post('/upload', isAuthenticated, async (req,res,next) =>{
     }
   });
 
- 
 // CR(U)D -- Update user object adding user preferences 
 router.put('/user-info',isAuthenticated, async(req, res, next) =>{
     try {
@@ -133,7 +120,6 @@ router.put('/user-info',isAuthenticated, async(req, res, next) =>{
 })
 
 //C(R)UD - Display all users
-
 router.get('/displayusers', isAuthenticated, async (req, res, next) =>{
    try {
     allUsers = await User.find();
@@ -146,7 +132,6 @@ router.get('/displayusers', isAuthenticated, async (req, res, next) =>{
 });
 
 //CR(U)D - Add user to userFollowed list
-
 router.post('/:userId/addfollower', isAuthenticated, async (req, res, next) =>{
   try {
     const {userId} = req.params;
@@ -165,9 +150,7 @@ router.post('/:userId/addfollower', isAuthenticated, async (req, res, next) =>{
   }
 });
 
-
 //CR(U)D - Remove user from userFollowed list
-
 router.post('/:userId/removefollower', isAuthenticated, async (req, res, next) =>{
     try {
       const {userId} = req.params;
