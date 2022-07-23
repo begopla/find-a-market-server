@@ -1,6 +1,7 @@
 const express = require("express")
 const isAuthenticated = require("../middleware/isAuthenticated")
 const isAuthor = require("../middleware/isAuthor")
+const isReviewCreator = require("../middleware/isReviewCreator")
 const router = express.Router()
 const Market = require("../models/Market.model")
 const Review = require("../models/Review.model")
@@ -140,7 +141,7 @@ router.delete("/:marketId", async (req, res, next) => {
 
 //Create a new review
 
-router.post("/:marketId/review", isAuthenticated , async(req, res, next) =>{
+router.post("/:marketId/review", isAuthenticated, isReviewCreator, async(req, res, next) =>{
 
 	try {
 		const { marketId } = req.params;
@@ -165,7 +166,7 @@ router.post("/:marketId/review", isAuthenticated , async(req, res, next) =>{
 
 // Save a market as favourite
 
-router.post("/:marketId/favourites", isAuthenticated, async (req, res, next) =>{
+router.post("/:marketId/favourites", isAuthenticated, isReviewCreator, async (req, res, next) =>{
 
 	try {
 		const { marketId } = req.params;
