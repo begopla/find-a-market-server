@@ -41,6 +41,16 @@ router.get("/discover", async (req, res, next) => {
 });
 
 
+router.get("/:marketId", async (req, res, next) => {
+	try {
+		const { marketId } = req.params
+		const market = await Market.findById(marketId)
+		return res.status(200).json(market)
+	} catch (error) {
+		next(error)
+	}
+})
+
 router.put("/:marketId", isAuthenticated, isAuthor, async (req, res, next) => {
     try { 
         const { marketId } = req.params
@@ -94,48 +104,6 @@ router.post("/", isAuthenticated, async (req, res, next) => {
 		next(error)
 	}
 });
-
-
-router.get("/:marketId", async (req, res, next) => {
-	try {
-		const { marketId } = req.params
-		const market = await Market.findById(marketId)
-		return res.status(200).json(market)
-	} catch (error) {
-		next(error)
-	}
-})
-router.put("/:marketId", async (req, res, next) => {
-    try { //!needs middleware to check if author 
-        const { marketId } = req.params
-        const market = await Market.findByIdAndUpdate(marketId, req.body, { new: true})
-        return res.status(200).json(market)
-    } catch (error) {
-        next(error)
-    }
-});
-
-router.delete("/:marketId", async (req, res, next) => {
-	try { //!same here
-		const { marketId } = req.params
-		await Market.findByIdAndDelete(marketId)
-		return res.status(200).json({ message: `Market ${marketId} deleted` })
-	} catch (error) {
-		next(error)
-	}
-});
-
-/*router.get("/search", async (req, res, next) => {
-	const { q } = req.query;
-    console.log(req.query);
-	try {
-		const searchResults = await Market.find({name:{$regex: q, $options: 'i'}});
-		
-		return res.status(200).json(searchResults);
-	} catch (error) {
-		next(error);
-	}
-});*/
 
 
 
@@ -221,8 +189,8 @@ router.post("/:marketId/removefav", isAuthenticated, async (req, res, next) =>{
 
 
 //Edit review
-router.put("/:marketId/:reviewId", async (req, res, next) => {
-    try { //!needs middleware to check if author 
+router.put("/:marketId/:reviewId", isAuthenticated, isReviewCreator, async (req, res, next) => {
+    try { 
         const {  reviewId } = req.params;
 		const { review } = req.body;
 		console.log(review)
@@ -236,8 +204,8 @@ router.put("/:marketId/:reviewId", async (req, res, next) => {
 
 //Delete review
 
-router.delete("/:marketId/:reviewId", async (req, res, next) => {
-	try { //!same here
+router.delete("/:marketId/:reviewId",isAuthenticated, isReviewCreator, async (req, res, next) => {
+	try { 
 		const {  reviewId } = req.params
 		await Review.findByIdAndDelete(reviewId)
 		return res.status(200).json({ message: `Review ${reviewId} deleted` })
