@@ -7,12 +7,15 @@ const Review = require("../models/Review.model")
 const User = require("../models/User.model")
 
 router.get("/search", async (req, res, next) => {
-	const q = req.query.name;
+	const q = req.query.q;
+	const options = [
+	{name: {$regex: `${q}`, $options: 'i'}},
+	{type: {$regex: `${q}`, $options: 'i'}}  //!needs country and city keys
+	]
     console.log("req.query: ", req.query)
 	console.log("q: ", q)
 	try {
-		//const searchResults = await Market.find(q);
-		const searchResults = await Market.find({name:{$regex: `${q}`, $options: 'i'}});
+		const searchResults = await Market.find({$or: options})
 		console.log(searchResults.length, " search results")
 		return res.status(200).json(searchResults);
 	} catch (error) {
@@ -37,8 +40,8 @@ router.get("/discover", async (req, res, next) => {
 });
 
 
-router.put("/:marketId", async (req, res, next) => {
-    try { //!needs middleware to check if author 
+router.put("/:marketId", isAuthenticated, isAuthor, async (req, res, next) => {
+    try { 
         const { marketId } = req.params
         const market = await Market.findByIdAndUpdate(marketId, req.body, { new: true})
         return res.status(200).json(market)
@@ -47,8 +50,8 @@ router.put("/:marketId", async (req, res, next) => {
     }
 });
 
-router.delete("/:marketId", async (req, res, next) => {
-	try { //!same here
+router.delete("/:marketId", isAuthenticated, isAuthor, async (req, res, next) => {
+	try { 
 		const { marketId } = req.params
 		await Market.findByIdAndDelete(marketId)
 		return res.status(200).json({ message: `Market ${marketId} deleted` })

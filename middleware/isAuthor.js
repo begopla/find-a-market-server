@@ -1,15 +1,13 @@
 const Market = require("../models/Market.model")
 
 const isAuthor = async (req, res, next) => {
-	const {id} = req.params;
-    console.log("params: ", req.params)
-    const market = await Market.findById(id).populate('author');
-    console.log("market: ", market)
-    console.log(req.payload)
+	const { marketId } = req.params;
+	const market = await Market.findById(marketId).populate('author');
+
 	if (req.payload._id === market.author._id.valueOf()) {
-		return next();
+		return next()
 	}
-	//res.redirect("/");
+	return res.status(400).json({ message: "You are not the author" })
 }
 
 module.exports = isAuthor
