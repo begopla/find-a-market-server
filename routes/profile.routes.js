@@ -11,7 +11,6 @@ const jwt = require("jsonwebtoken")
  */
 
 // C(R)UD -- Read and return current user favourite markets
-
 router.get("/favourites",isAuthenticated, async (req, res, next) =>{
 
     try {
@@ -27,7 +26,6 @@ router.get("/favourites",isAuthenticated, async (req, res, next) =>{
 })
 
 // C(R)UD -- Read and return followed users
-
 router.get("/followed",isAuthenticated, async (req, res, next) =>{
 
     try {
@@ -42,10 +40,8 @@ router.get("/followed",isAuthenticated, async (req, res, next) =>{
     }
 })
 
-
 router.get("/", isAuthenticated, (req, res, next)=>{
     res.status(200).json(req.payload);
-    
 });
 
 // CR(U)D -- Update user object adding image string
@@ -78,9 +74,7 @@ router.put('/',isAuthenticated, async(req, res, next) =>{
     }
 })
 
-
 //CR(U)D -- return ImageURL
-//!It's returning the old image, what is wrong?
 router.post('/upload', isAuthenticated, async (req,res,next) =>{
     try {   
         userObjectImage = req.payload.profilePicture
@@ -95,7 +89,6 @@ router.post('/upload', isAuthenticated, async (req,res,next) =>{
     }
   });
 
- 
 // CR(U)D -- Update user object adding user preferences 
 router.put('/user-info',isAuthenticated, async(req, res, next) =>{
     try {
@@ -126,6 +119,54 @@ router.put('/user-info',isAuthenticated, async(req, res, next) =>{
     }
 })
 
+//C(R)UD - Display all users
+router.get('/displayusers', isAuthenticated, async (req, res, next) =>{
+   try {
+    allUsers = await User.find();
+    res.status(200).json({
+          users: allUsers
+          });
+   } catch (error) {
+        next(error)
+   }
+});
 
+//CR(U)D - Add user to userFollowed list
+router.post('/:userId/addfollower', isAuthenticated, async (req, res, next) =>{
+  try {
+    const {userId} = req.params;
+
+    const newUser = await User.findByIdAndUpdate(
+        req.payload._id,
+        {
+            $addToSet: {usersFollowed: userId}
+        },
+        {new: true}
+    );
+    return res.status(200).json({message: 'User is now being followed',
+				following: newUser.usersFollowed})
+  } catch (error) {
+    next(error);
+  }
+});
+
+//CR(U)D - Remove user from userFollowed list
+router.post('/:userId/removefollower', isAuthenticated, async (req, res, next) =>{
+    try {
+      const {userId} = req.params;
+  
+      const newUser = await User.findByIdAndUpdate(
+          req.payload._id,
+          {
+              $pull: {usersFollowed: userId}
+          },
+          {new: true}
+      );
+      return res.status(200).json({message: 'User is now unfollowed',
+                  following: newUser.usersFollowed})
+    } catch (error) {
+      next(error);
+    }
+  });
 
 module.exports = router;
