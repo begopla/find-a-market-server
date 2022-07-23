@@ -134,7 +134,7 @@ router.post("/:marketId/review", isAuthenticated, isReviewCreator, async(req, re
 
 // Save a market as favourite
 
-router.post("/:marketId/favourites", isAuthenticated, isReviewCreator, async (req, res, next) =>{
+router.post("/:marketId/favourites", isAuthenticated, async (req, res, next) =>{
 
 	try {
 		const { marketId } = req.params;
