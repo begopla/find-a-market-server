@@ -71,14 +71,14 @@ router.delete("/:marketId", isAuthenticated, isAuthor, async (req, res, next) =>
 	}
 });
 
-router.get("/", async (req, res, next) => {
+/*router.get("/", async (req, res, next) => {
 	try {
 		const markets = await Market.find()
 		return res.status(200).json(markets)
 	} catch (error) {
 		next(error)
 	}
-});
+});*/
 
 router.post("/", isAuthenticated, async (req, res, next) => {
 	console.log(req.payload)

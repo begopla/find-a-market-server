@@ -3,7 +3,11 @@ const { Schema, model } = require("mongoose")
 const marketSchema = new Schema(
     {
         name: { type: String, required: true },
-        imageUrl: String,
+        imageUrl: {
+            type: String,
+            //default: '../assets/default-placeholder.png'
+            default: 'https://www.sinrumbofijo.com/wp-content/uploads/2016/05/default-placeholder.png'
+        },
         address: {
             coordinates: [Number]
         },
