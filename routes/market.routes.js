@@ -90,12 +90,15 @@ router.delete("/:marketId", isAuthenticated, isAuthor, async (req, res, next) =>
 router.post("/", isAuthenticated, uploader.single('imageUrl'), async (req, res, next) => {
 	console.log(req.payload)
 	console.log(req.file)
+	if (req.file) {
+        req.body.imageUrl = req.file.path;
+    }
 	try {
 		const { name, type, description, address, opening_days, opening_months, from, to, website } = req.body
 		if (!name) {
 			return res.status(400).json({ message: "Name is required" })
 		}
-		const market = await Market.create({ 
+		const market = await Market.create({
             name,
             author: req.payload, 
             type,
