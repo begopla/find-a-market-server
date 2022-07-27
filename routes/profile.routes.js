@@ -3,6 +3,7 @@ const isAuthenticated = require("../middleware/isAuthenticated");
 const User = require("../models/User.model");
 const Market = require("../models/Market.model");
 const jwt = require("jsonwebtoken")
+const uploader = require('../config/cloudinary.config')
 
 /**
  *
@@ -45,13 +46,13 @@ router.get("/", isAuthenticated, (req, res, next)=>{
 });
 
 // CR(U)D -- Update user object adding image string
-router.put('/',isAuthenticated, async(req, res, next) =>{
+router.put('/',isAuthenticated, uploader.single('profilePicture'), async(req, res, next) =>{
     try {
-       const {profilePicture} =req.body;
+       const {profilePicture} = req.body; //?
        const user = await User.findByIdAndUpdate(
         req.payload._id,
         {
-            profilePicture,
+            profilePicture: req.file.path
         },
         { new: true}
        );
