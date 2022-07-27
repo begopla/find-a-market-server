@@ -59,8 +59,12 @@ router.get("/:marketId", async (req, res, next) => {
 
 //Edit market details
 
-router.put("/:marketId", isAuthenticated, uploader.single('imageUrl'), isAuthor, async (req, res, next) => {
-    try { 
+router.put("/:marketId", isAuthenticated, isAuthor, uploader.single('imageUrl'), async (req, res, next) => {
+    const { imageUrl } = req.body;
+    if (req.file) {
+        req.body.imageUrl = req.file.path;
+    }
+	try { 
         const { marketId } = req.params
         const market = await Market.findByIdAndUpdate(marketId, req.body, { new: true})
         return res.status(200).json(market)
