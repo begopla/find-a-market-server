@@ -6,6 +6,9 @@ const router = express.Router()
 const Market = require("../models/Market.model")
 const Review = require("../models/Review.model")
 const User = require("../models/User.model")
+const uploader = require('../config/cloudinary.config')
+
+//Display search results
 
 router.get("/search", async (req, res, next) => {
 	const q = req.query.q;
@@ -13,24 +16,26 @@ router.get("/search", async (req, res, next) => {
 	{name: {$regex: `${q}`, $options: 'i'}},
 	{type: {$regex: `${q}`, $options: 'i'}}  //!needs country and city keys
 	]
-    console.log("req.query: ", req.query)
-	console.log("q: ", q)
+    //console.log("req.query: ", req.query)
+	//console.log("q: ", q)
 	try {
 		const searchResults = await Market.find({$or: options})
-		console.log(searchResults.length, " search results")
+		//console.log(searchResults.length, " search results")
 		return res.status(200).json(searchResults);
 	} catch (error) {
 		next(error);
 	}
 });
 
+//Display random market page
+
 router.get("/discover", async (req, res, next) => {
-	console.log("something")
+	
 	 try {
 		const markets = await Market.find()
 
 		const randomId = markets[Math.floor(Math.random() * markets.length)]._id.valueOf();
-		console.log(randomId)
+		//console.log(randomId)
 
 		const market = await Market.findById(randomId)
 		return res.status(200).json(market)
@@ -40,6 +45,7 @@ router.get("/discover", async (req, res, next) => {
 	} 
 });
 
+//Display market details page
 
 router.get("/:marketId", async (req, res, next) => {
 	try {
@@ -49,10 +55,16 @@ router.get("/:marketId", async (req, res, next) => {
 	} catch (error) {
 		next(error)
 	}
-})
+});
 
-router.put("/:marketId", isAuthenticated, isAuthor, async (req, res, next) => {
-    try { 
+//Edit market details
+
+router.put("/:marketId", isAuthenticated, isAuthor, uploader.single('imageUrl'), async (req, res, next) => {
+    const { imageUrl } = req.body;
+    if (req.file) {
+        req.body.imageUrl = req.file.path;
+    }
+	try { 
         const { marketId } = req.params
         const market = await Market.findByIdAndUpdate(marketId, req.body, { new: true})
         return res.status(200).json(market)
@@ -60,6 +72,8 @@ router.put("/:marketId", isAuthenticated, isAuthor, async (req, res, next) => {
         next(error)
     }
 });
+
+//Delete market
 
 router.delete("/:marketId", isAuthenticated, isAuthor, async (req, res, next) => {
 	try { 
@@ -71,27 +85,24 @@ router.delete("/:marketId", isAuthenticated, isAuthor, async (req, res, next) =>
 	}
 });
 
-/*router.get("/", async (req, res, next) => {
-	try {
-		const markets = await Market.find()
-		return res.status(200).json(markets)
-	} catch (error) {
-		next(error)
-	}
-});*/
+//Create new market
 
-router.post("/", isAuthenticated, async (req, res, next) => {
+router.post("/", isAuthenticated, uploader.single('imageUrl'), async (req, res, next) => {
 	console.log(req.payload)
+	console.log(req.file)
+	if (req.file) {
+        req.body.imageUrl = req.file.path;
+    }
 	try {
-		const { name, author, type, imageUrl, description, address, opening_days, opening_months, from, to, website } = req.body
+		const { name, type, description, address, opening_days, opening_months, from, to, website } = req.body
 		if (!name) {
 			return res.status(400).json({ message: "Name is required" })
 		}
-		const market = await Market.create({ 
+		const market = await Market.create({
             name,
             author: req.payload, 
             type,
-            imageUrl, 
+            imageUrl: req.file.path, 
             description, 
             address, 
             opening_days, 
@@ -104,8 +115,6 @@ router.post("/", isAuthenticated, async (req, res, next) => {
 		next(error)
 	}
 });
-
-
 
 //Create a new review
 
@@ -129,8 +138,7 @@ router.post("/:marketId/review", isAuthenticated, async(req, res, next) =>{
 	} catch (error) {
 		
 	}
-})
-
+});
 
 // Save a market as favourite
 
@@ -159,7 +167,8 @@ router.post("/:marketId/favourites", isAuthenticated, async (req, res, next) =>{
 	} catch (error) {
 		next(error);
 	}
-})
+});
+
 // Remove a market from favourite list
 
 router.post("/:marketId/removefav", isAuthenticated, async (req, res, next) =>{
@@ -187,8 +196,8 @@ router.post("/:marketId/removefav", isAuthenticated, async (req, res, next) =>{
 	}
 })
 
-
 //Edit review
+
 router.put("/:marketId/:reviewId", isAuthenticated, isReviewCreator, async (req, res, next) => {
     try { 
         const {  reviewId } = req.params;
