@@ -50,7 +50,7 @@ router.get("/discover", async (req, res, next) => {
 router.get("/:marketId", async (req, res, next) => {
 	try {
 		const { marketId } = req.params
-		const market = await Market.findById(marketId)
+		const market = await Market.findById(marketId).populate('author');
 		return res.status(200).json(market)
 	} catch (error) {
 		next(error)
@@ -78,7 +78,7 @@ router.put("/:marketId", isAuthenticated, isAuthor, uploader.single('imageUrl'),
 router.delete("/:marketId", isAuthenticated, isAuthor, async (req, res, next) => {
 	try { 
 		const { marketId } = req.params
-		await Market.findByIdAndDelete(marketId)
+		await Market.findByIdAndDelete(marketId).populate('author');
 		return res.status(200).json({ message: `Market ${marketId} deleted` })
 	} catch (error) {
 		next(error)
