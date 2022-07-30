@@ -58,6 +58,7 @@ router.put('/', isAuthenticated, uploader.single('profilePicture'), async (req, 
             expiresIn: "2d",
         });
         //console.log(profilePicture)
+        console.log(user)
         res.status(200).json({
             message: 'File successfully uploaded',
             image: profilePicture,
