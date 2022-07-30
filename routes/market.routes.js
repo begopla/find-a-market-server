@@ -33,7 +33,7 @@ router.get("/discover", async (req, res, next) => {
 	
 	 try {
 		const markets = await Market.find()
-
+		
 		const randomId = markets[Math.floor(Math.random() * markets.length)]._id.valueOf();
 		//console.log(randomId)
 
