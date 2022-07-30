@@ -61,7 +61,7 @@ router.put('/', isAuthenticated, uploader.single('profilePicture'), async (req, 
         res.status(200).json({
             message: 'File successfully uploaded',
             image: profilePicture,
-            user: req.payload,
+            user: user,
             token: authToken
         });
 
@@ -105,7 +105,7 @@ router.put('/user-info', isAuthenticated, async (req, res, next) => {
         res.status(200).json({
 
             message: 'File successfully uploaded',
-            user: req.payload,
+            user: user,
             token: authToken
 
         });

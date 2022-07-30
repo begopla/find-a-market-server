@@ -13,9 +13,9 @@ const marketSchema = new Schema(
         },
         type: {
             type: String,
-            enum: ["Farmers market", "Fresh Food market", "Flea market", "Street Food market", "Bazaar", "Night market", "Books market"]
+            enum: ["Farmers market", "Fresh Food market", "Flea market", "Street Food market", "Bazaar", "Night market", "Books market", "Fish market"]
         },
-        Description: String,
+        description: String,
         opening_days: [{
             type: String,
             enum: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "Every day"]
