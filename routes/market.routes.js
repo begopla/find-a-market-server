@@ -8,6 +8,38 @@ const Review = require("../models/Review.model")
 const User = require("../models/User.model")
 const uploader = require('../config/cloudinary.config')
 
+/**
+ *
+ * * All the routes are prefixed with `/api/markets`
+ *
+ */
+
+//!Display markets creted by user
+
+router.get("/my-markets", isAuthenticated,  async (req,res,next) =>{
+	try {
+		const markets = await Market.find().populate('author');
+		const userId = req.payload._id;
+		// const marketsByAuthor = markets.filter(market =>{
+		// 	market.author._id.valueOf()===userId
+		// })
+		
+		const marketsByAuthor = []
+		for(i=0; i<markets.length; i++){
+			
+			if(markets[i].author._id.valueOf()===userId){
+				marketsByAuthor.push(markets[i])	
+			}
+		}
+		
+		return res.status(200).json(marketsByAuthor);
+		
+	} catch (error) {
+		next(error)
+	} 
+
+})
+
 //Display search results
 
 router.get("/search", async (req, res, next) => {

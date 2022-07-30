@@ -15,7 +15,7 @@ const uploader = require('../config/cloudinary.config')
 router.get("/favourites", isAuthenticated, async (req, res, next) => {
 
     try {
-        userId = req.payload._id;
+        const userId = req.payload._id;
         const user = await User.findById(userId).populate("bookmarkList");
         const savedMarkets = user.bookmarkList;
         res.status(200).json({
