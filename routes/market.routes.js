@@ -14,7 +14,7 @@ const uploader = require('../config/cloudinary.config')
  *
  */
 
-//!Display markets creted by user
+//Display markets creted by user
 
 router.get("/my-markets", isAuthenticated,  async (req,res,next) =>{
 	try {
@@ -92,13 +92,21 @@ router.get("/:marketId", async (req, res, next) => {
 //Edit market details
 
 router.put("/:marketId", isAuthenticated, isAuthor, uploader.single('imageUrl'), async (req, res, next) => {
-    const { imageUrl } = req.body;
+    const { name, type, description, website } = req.body;
     if (req.file) {
         req.body.imageUrl = req.file.path;
     }
 	try { 
         const { marketId } = req.params
-        const market = await Market.findByIdAndUpdate(marketId, req.body, { new: true})
+        const market = await Market.findByIdAndUpdate(marketId,
+		 {
+			name, 
+			type, 
+			description, 
+			website
+		},
+		 { new: true})
+		 console.log(market)
         return res.status(200).json(market)
     } catch (error) {
         next(error)
@@ -134,7 +142,6 @@ router.post("/", isAuthenticated, uploader.single('imageUrl'), async (req, res, 
             name,
             author: req.payload, 
             type,
-            imageUrl: req.file.path, 
             description, 
             address, 
             opening_days, 
