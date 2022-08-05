@@ -3,7 +3,7 @@ const { Schema, model } = require("mongoose")
 // TODO: Please make sure you edit the user model to whatever makes sense in this case
 const userSchema = new Schema(
 	{
-		username: {
+		name: {
 			type: String,
 			required:true,
 			unique: true 
@@ -30,15 +30,15 @@ const userSchema = new Schema(
 			},
 		],
 		typeOfCuisine:[{
-			type: String,
+			type: Object,
 			enum:["Asian Food", "French",  "Mediterranean", "Lebanese", "Turkish", "Indian", "Mexican", "Caribbean", "German", "Rusian", "American", "Others"]
 		}],
 		dietaryReq:[{
-			type: String,
+			type: Object,
 			enum:["Fast Food", "Vegetarian", "Vegan", "Low Carbs", "Healthy", "WholeFood", "Ecological", "Others"]
 		}],
 		eatingHabits:[{
-			type:String,
+			type:Object,
 			enum:["Cooking", "EatIn", "Delivery", "StreetFood", "Others"]
 		}],
 	},

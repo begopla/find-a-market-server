@@ -89,12 +89,15 @@ router.post('/upload', isAuthenticated, async (req, res, next) => {
 // CR(U)D -- Update user object adding user preferences 
 router.put('/user-info', isAuthenticated, async (req, res, next) => {
     try {
-        const { typeOfCuisine, dietaryReq } = req.body;
+        const { name, location, typeOfCuisine, dietaryReq, eatingHabits } = req.body;
         const user = await User.findByIdAndUpdate(
             req.payload._id,
             {
+                name,
+                location,
                 typeOfCuisine,
                 dietaryReq,
+                eatingHabits
             },
             { new: true }
         );
@@ -102,7 +105,7 @@ router.put('/user-info', isAuthenticated, async (req, res, next) => {
             algorithm: "HS256",
             expiresIn: "2d",
         });
-        console.log(typeOfCuisine, dietaryReq)
+        console.log(name, location, typeOfCuisine, dietaryReq, eatingHabits)
         res.status(200).json({
 
             message: 'File successfully uploaded',
