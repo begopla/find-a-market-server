@@ -92,7 +92,7 @@ router.get("/:marketId", async (req, res, next) => {
 //Edit market details
 
 router.put("/:marketId", isAuthenticated, isAuthor, uploader.single('imageUrl'), async (req, res, next) => {
-    const { name, type, description, website } = req.body;
+    const { name, type, description, coordinates ,address,website } = req.body;
     if (req.file) {
         req.body.imageUrl = req.file.path;
     }
@@ -103,6 +103,8 @@ router.put("/:marketId", isAuthenticated, isAuthor, uploader.single('imageUrl'),
 			name, 
 			type, 
 			description, 
+			coordinates,
+			address,
 			website
 		},
 		 { new: true})
@@ -134,7 +136,7 @@ router.post("/", isAuthenticated, uploader.single('imageUrl'), async (req, res, 
         req.body.imageUrl = req.file.path;
     }
 	try {
-		const { name, type, description, address, opening_days, opening_months, from, to, website } = req.body
+		const { name, type, description, coordinates,address, opening_days, opening_months, from, to, website } = req.body
 		if (!name) {
 			return res.status(400).json({ message: "Name is required" })
 		}
@@ -143,7 +145,8 @@ router.post("/", isAuthenticated, uploader.single('imageUrl'), async (req, res, 
             author: req.payload, 
             type,
             description, 
-            address, 
+            coordinates, 
+			address,
             opening_days, 
             opening_months, 
             opening_hours: {from, to},
