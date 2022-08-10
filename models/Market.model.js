@@ -9,9 +9,9 @@ const marketSchema = new Schema(
             default: 'https://www.sinrumbofijo.com/wp-content/uploads/2016/05/default-placeholder.png'
         },
         coordinates: {},
-        address:[
-            {type: Object,}
-        ],
+        address:{
+            type:String, 
+        },
         type: {
             type: String,
             enum: ["Farmers market", "Fresh Food market", "Flea market", "Street Food market", "Bazaar", "Night market", "Books market", "Fish market"]
