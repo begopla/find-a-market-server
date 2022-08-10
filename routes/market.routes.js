@@ -46,7 +46,8 @@ router.get("/search", async (req, res, next) => {
 	const q = req.query.q;
 	const options = [
 	{name: {$regex: `${q}`, $options: 'i'}},
-	{type: {$regex: `${q}`, $options: 'i'}}  //!needs country and city keys
+	{type: {$regex: `${q}`, $options: 'i'}},
+	{address: {$regex: `${q}`, $options: 'i'}}  //!needs country and city keys
 	]
     //console.log("req.query: ", req.query)
 	//console.log("q: ", q)
