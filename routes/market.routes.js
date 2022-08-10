@@ -92,28 +92,20 @@ router.get("/:marketId", async (req, res, next) => {
 //Edit market details
 
 router.put("/:marketId", isAuthenticated, isAuthor, uploader.single('imageUrl'), async (req, res, next) => {
-    const { name, type, description, coordinates ,address,website } = req.body;
+    const { name, type, description, coordinates ,address,website, ImageUrl } = req.body;
     if (req.file) {
         req.body.imageUrl = req.file.path;
     }
 	try { 
         const { marketId } = req.params
-        const market = await Market.findByIdAndUpdate(marketId,
-		 {
-			name, 
-			type, 
-			description, 
-			coordinates,
-			address,
-			website
-		},
-		 { new: true})
-		 console.log(market)
+        const market = await Market.findByIdAndUpdate(marketId,req.body, { new: true})
+		console.log(market)
         return res.status(200).json(market)
     } catch (error) {
         next(error)
     }
 });
+
 
 //Delete market
 
@@ -130,13 +122,12 @@ router.delete("/:marketId", isAuthenticated, isAuthor, async (req, res, next) =>
 //Create new market
 
 router.post("/", isAuthenticated, uploader.single('imageUrl'), async (req, res, next) => {
-	console.log(req.payload)
-	console.log(req.file)
-	if (req.file) {
-        req.body.imageUrl = req.file.path;
-    }
+	
 	try {
 		const { name, type, description, coordinates,address, opening_days, opening_months, from, to, website } = req.body
+		// if (req.file) {
+		// 	req.body.imageUrl = req.file.path;
+		// }
 		if (!name) {
 			return res.status(400).json({ message: "Name is required" })
 		}
