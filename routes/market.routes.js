@@ -101,7 +101,7 @@ router.put("/:marketId", isAuthenticated, isAuthor, uploader.single('imageUrl'),
         req.body.imageUrl = req.file.path;
     }
 	console.log(author, coordinates)
-	return res.status(200).json({ok:'ok'})
+	//return res.status(200).json({ok:'ok'})
 	try { 
         const { marketId } = req.params
         const market = await Market.findByIdAndUpdate(marketId,req.body, { new: true})
