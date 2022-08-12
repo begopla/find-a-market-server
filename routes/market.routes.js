@@ -18,7 +18,7 @@ const uploader = require('../config/cloudinary.config')
 
 router.get("/my-markets", isAuthenticated,  async (req,res,next) =>{
 	try {
-		const markets = await Market.find().populate('author');
+		const markets = await Market.find().populate('author');	
 		const userId = req.payload._id;
 		// const marketsByAuthor = markets.filter(market =>{
 		// 	market.author._id.valueOf()===userId
@@ -26,12 +26,16 @@ router.get("/my-markets", isAuthenticated,  async (req,res,next) =>{
 		
 		const marketsByAuthor = []
 		for(i=0; i<markets.length; i++){
+			const currentMarket = markets[i]
+		    const marketAuthorID = currentMarket.author._id;
+			const marketID= marketAuthorID.valueOf();
 			
-			if(markets[i].author._id.valueOf()===userId){
-				marketsByAuthor.push(markets[i])	
-			}
+			 if(marketID === userId){
+			 	marketsByAuthor.push(markets[i])	
+			 }
 		}
 		
+
 		return res.status(200).json(marketsByAuthor);
 		
 	} catch (error) {
@@ -92,10 +96,12 @@ router.get("/:marketId", async (req, res, next) => {
 //Edit market details
 
 router.put("/:marketId", isAuthenticated, isAuthor, uploader.single('imageUrl'), async (req, res, next) => {
-    const { name, type, description, coordinates ,address,website, ImageUrl } = req.body;
+     const { name, type, description, coordinates ,address,website, author } = req.body;
     if (req.file) {
         req.body.imageUrl = req.file.path;
     }
+	console.log(author, coordinates)
+	return res.status(200).json({ok:'ok'})
 	try { 
         const { marketId } = req.params
         const market = await Market.findByIdAndUpdate(marketId,req.body, { new: true})
