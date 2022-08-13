@@ -157,20 +157,33 @@ router.post("/:marketId/review", isAuthenticated, async(req, res, next) =>{
 	try {
 		const { marketId } = req.params;
 		const { review } = req.body;
+		console.log(req.body);
 
 		const newReview = await Review.create({
 			market: marketId,
 			author: req.payload._id,
-			review: review,
+			review
 		});
+
+		const allReviews = await Review.find();
+		console.log(allReviews)
+		const reviews = [];
+		for (let i=0; i< allReviews.length;  i++){
+			const currentMarketId = allReviews[i].market.valueOf();
+			console.log('currentMarketId:', currentMarketId)
+			if(marketId === currentMarketId){
+				reviews.push(allReviews[i])
+			}
+		}
+		console.log('reviews:', reviews)
 		
 		return res.status(200).json({ message: 'Review added',
-			review: newReview
+			reviews
 			
 	 });
 
 	} catch (error) {
-		
+		console.error(error)
 	}
 });
 
