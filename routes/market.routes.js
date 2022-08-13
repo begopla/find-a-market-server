@@ -156,12 +156,12 @@ router.post("/:marketId/review", isAuthenticated, async(req, res, next) =>{
 
 	try {
 		const { marketId } = req.params;
-		const { comment } = req.body;
+		const { review } = req.body;
 
 		const newReview = await Review.create({
 			market: marketId,
 			author: req.payload._id,
-			review: comment,
+			review: review,
 		});
 		
 		return res.status(200).json({ message: 'Review added',
