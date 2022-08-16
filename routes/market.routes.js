@@ -84,7 +84,10 @@ router.get("/:marketId", async (req, res, next) => {
 	try {
 		const { marketId } = req.params
 		const market = await Market.findById(marketId).populate('author');
-		return res.status(200).json(market)
+		const allReviews = await Review.find({market:marketId}).populate('author');
+		//console.log(market, allReviews)
+		
+		return res.status(200).json({market, allReviews})
 	} catch (error) {
 		next(error)
 	}
