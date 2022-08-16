@@ -26,14 +26,8 @@ const marketSchema = new Schema(
             enum: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "All year"]
         }],
         opening_hours: {
-            from: {
-                type: Number,
-                max: 23
-            },
-            to: {
-                type: Number,
-                max: 23
-            }
+            from: String,
+            to: String
         },
         website: String,
         stars: [{ type: Schema.Types.ObjectId, ref: "User" }], //!Stars es el numero de users que han marcado la actividad como favorita?

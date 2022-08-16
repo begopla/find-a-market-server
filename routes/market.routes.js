@@ -88,7 +88,10 @@ router.get("/:marketId", async (req, res, next) => {
 	try {
 		const { marketId } = req.params
 		const market = await Market.findById(marketId).populate('author');
-		return res.status(200).json(market)
+		const allReviews = await Review.find({market:marketId}).populate('author');
+		//console.log(market, allReviews)
+		
+		return res.status(200).json({market, allReviews})
 	} catch (error) {
 		next(error)
 	}
@@ -172,21 +175,34 @@ router.post("/:marketId/review", isAuthenticated, async(req, res, next) =>{
 
 	try {
 		const { marketId } = req.params;
-		const { comment } = req.body;
+		const { review } = req.body;
+		console.log(req.body);
 
 		const newReview = await Review.create({
 			market: marketId,
 			author: req.payload._id,
-			review: comment,
+			review
 		});
+
+		const allReviews = await Review.find();
+		console.log(allReviews)
+		const reviews = [];
+		for (let i=0; i< allReviews.length;  i++){
+			const currentMarketId = allReviews[i].market.valueOf();
+			console.log('currentMarketId:', currentMarketId)
+			if(marketId === currentMarketId){
+				reviews.push(allReviews[i])
+			}
+		}
+		console.log('reviews:', reviews)
 		
 		return res.status(200).json({ message: 'Review added',
-			review: newReview
+			reviews
 			
 	 });
 
 	} catch (error) {
-		
+		console.error(error)
 	}
 });
 
