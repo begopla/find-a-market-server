@@ -144,7 +144,7 @@ router.delete("/:marketId", isAuthenticated, isAuthor, async (req, res, next) =>
 router.post("/", isAuthenticated, uploader.single('imageUrl'), async (req, res, next) => {
 	
 	try {
-		const { name, type, description, coordinates,address, opening_days, opening_months, from, to, website } = req.body
+		const { name, type, description, coordinates,address, openingDays, openingMonths, from, to, website } = req.body
 		// if (req.file) {
 		// 	req.body.imageUrl = req.file.path;
 		// }
@@ -158,8 +158,8 @@ router.post("/", isAuthenticated, uploader.single('imageUrl'), async (req, res, 
             description, 
             coordinates, 
 			address,
-            opening_days, 
-            opening_months, 
+            openingDays, 
+            openingMonths, 
             opening_hours: {from, to},
             website
 		})

@@ -17,13 +17,12 @@ const marketSchema = new Schema(
             enum: ["Farmers market", "Fresh Food market", "Flea market", "Street Food market", "Bazaar", "Night market", "Books market", "Fish market"]
         },
         description: String,
-        opening_days: [{
-            type: String,
-            enum: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "Every day"]
+        openingMonths: [{
+            type: String
+    
         }],
-        opening_months: [{
-            type: String,
-            enum: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December", "All year"]
+        openingDays: [{
+            type: String
         }],
         opening_hours: {
             from: String,
