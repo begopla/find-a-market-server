@@ -100,7 +100,8 @@ router.get("/:marketId", async (req, res, next) => {
 //Edit market details
 
 router.put("/:marketId", isAuthenticated, isAuthor, uploader.single('imageUrl'), async (req, res, next) => {
-     const { name, type, description, coordinates ,address,website } = req.body;
+     const { name, type, description, coordinates, address, openingDays, openingMonths, from, to, website } = req.body;
+
     if (req.file) {
         req.body.imageUrl = req.file.path;
     }
@@ -113,11 +114,12 @@ router.put("/:marketId", isAuthenticated, isAuthor, uploader.single('imageUrl'),
 			type, 
 			description,
 			address,
+			opening_hours: {from, to},
+			website,
 			imageUrl: req.file?.path,
 			coordinates: JSON.parse(coordinates),
-			website,
-
-
+			openingDays:JSON.parse(openingDays),
+			openingMonths: JSON.parse(openingMonths)
 		}, { new: true})
 		console.log(market)
         return res.status(200).json(market)
