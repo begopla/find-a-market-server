@@ -1,12 +1,11 @@
 const { Schema, model } = require("mongoose")
 
-// TODO: Please make sure you edit the user model to whatever makes sense in this case
 const userSchema = new Schema(
 	{
 		name: {
 			type: String,
-			required:true,
-			unique: true 
+			required: true,
+			unique: true
 		},
 		email: String,
 		password: String,
@@ -14,9 +13,9 @@ const userSchema = new Schema(
 			type: String,
 			default: '../assets/userLogo.png'
 		},
-		
+
 		location: String,
-		bookmarkList:[
+		bookmarkList: [
 			{
 				type: Schema.Types.ObjectId,
 				ref: "Market"
@@ -25,28 +24,27 @@ const userSchema = new Schema(
 		usersFollowed: [
 			{
 				type: Schema.Types.ObjectId,
-				ref:'User'
+				ref: 'User'
 
 			},
 		],
-		typeOfCuisine:[{
+		typeOfCuisine: [{
 			type: Object,
-			enum:["Asian Food", "French",  "Mediterranean", "Lebanese", "Turkish", "Indian", "Mexican", "Caribbean", "German", "Rusian", "American", "Others"]
+			enum: ["Asian Food", "French", "Mediterranean", "Lebanese", "Turkish", "Indian", "Mexican", "Caribbean", "German", "Rusian", "American", "Others"]
 		}],
-		dietaryReq:[{
+		dietaryReq: [{
 			type: Object,
-			enum:["Fast Food", "Vegetarian", "Vegan", "Low Carbs", "Healthy", "WholeFood", "Ecological", "Others"]
+			enum: ["Fast Food", "Vegetarian", "Vegan", "Low Carbs", "Healthy", "WholeFood", "Ecological", "Others"]
 		}],
-		eatingHabits:[{
-			type:Object,
-			enum:["Cooking", "EatIn", "Delivery", "StreetFood", "Others"]
+		eatingHabits: [{
+			type: Object,
+			enum: ["Cooking", "EatIn", "Delivery", "StreetFood", "Others"]
 		}],
 	},
 	{
-		// this second object adds extra properties: `createdAt` and `updatedAt`
 		timestamps: true,
 	}
-	
+
 )
 
 const User = model("User", userSchema)

@@ -14,7 +14,6 @@ const saltRounds = 10
 
 router.post("/signup", async (req, res, next) => {
 	const { name, email, password } = req.body
-	console.log(req.body)
 	if (email === "" || name === "" || password === "") {
 		res
 			.status(400)
@@ -112,7 +111,6 @@ router.post("/signin", async (req, res, next) => {
 })
 
 router.get("/me", isAuthenticated, (req, res, next) => {
-	// console.log("req payload", req.payload);
 	res.status(200).json(req.payload)
 })
 
