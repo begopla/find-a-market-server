@@ -57,15 +57,12 @@ router.put('/', isAuthenticated, uploader.single('profilePicture'), async (req, 
             algorithm: "HS256",
             expiresIn: "2d",
         });
-        //console.log(profilePicture)
-        console.log(user)
         res.status(200).json({
             message: 'File successfully uploaded',
             image: profilePicture,
             user: user,
             token: authToken
         });
-
     } catch (error) {
         next(error);
     }
@@ -75,12 +72,10 @@ router.put('/', isAuthenticated, uploader.single('profilePicture'), async (req, 
 router.post('/upload', isAuthenticated, async (req, res, next) => {
     try {
         userObjectImage = req.payload.profilePicture
-        console.log(userObjectImage);
         return res.status(200).json({
             message: 'Current user profile picture has been sent',
             user: userObjectImage
         })
-
     } catch (error) {
         next(error)
     }
@@ -105,19 +100,15 @@ router.put('/user-info', isAuthenticated, async (req, res, next) => {
             algorithm: "HS256",
             expiresIn: "2d",
         });
-        console.log(name, location, typeOfCuisine, dietaryReq, eatingHabits)
         res.status(200).json({
-
             message: 'File successfully uploaded',
             user: user,
             token: authToken
-
         });
-
     } catch (error) {
         next(error);
     }
-})
+});
 
 //C(R)UD - Display all users
 router.get('/displayusers', isAuthenticated, async (req, res, next) => {
@@ -135,7 +126,6 @@ router.get('/displayusers', isAuthenticated, async (req, res, next) => {
 router.post('/:userId/addfollower', isAuthenticated, async (req, res, next) => {
     try {
         const { userId } = req.params;
-
         const newUser = await User.findByIdAndUpdate(
             req.payload._id,
             {
@@ -156,7 +146,6 @@ router.post('/:userId/addfollower', isAuthenticated, async (req, res, next) => {
 router.post('/:userId/removefollower', isAuthenticated, async (req, res, next) => {
     try {
         const { userId } = req.params;
-
         const newUser = await User.findByIdAndUpdate(
             req.payload._id,
             {

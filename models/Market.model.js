@@ -5,7 +5,6 @@ const marketSchema = new Schema(
         name: { type: String, required: true },
         imageUrl: {
             type: String,
-            //default: '../assets/default-placeholder.png'
             default: 'https://www.sinrumbofijo.com/wp-content/uploads/2016/05/default-placeholder.png'
         },
         coordinates: {},
@@ -29,7 +28,7 @@ const marketSchema = new Schema(
             to: String
         },
         website: String,
-        stars: [{ type: Schema.Types.ObjectId, ref: "User" }], //!Stars es el numero de users que han marcado la actividad como favorita?
+        stars: [{ type: Schema.Types.ObjectId, ref: "User" }], 
         author: { type: Schema.Types.ObjectId, ref: "User" }
     }
 )
